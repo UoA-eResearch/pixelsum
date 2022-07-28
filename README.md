@@ -12,5 +12,5 @@ Python script to read a video file, sum the pixel values by frame, and plot resu
 
 Will output a plain text file with the calculated values, as well as a plot in PNG format
 
-Sample plot:
+Sample plot:  
 ![sample plot](sample.png)
