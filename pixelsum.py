@@ -5,11 +5,14 @@ import matplotlib.pyplot as plt # Plotting
 import skvideo.io
 import sys
 from tqdm import tqdm # Progress bar
+from pprint import pprint
 
 filename = sys.argv[1]
 
 metadata = skvideo.io.ffprobe(filename)["video"]
+#pprint(metadata)
 n_frames = int(metadata["@nb_frames"])
+frame_rate = int(metadata["@r_frame_rate"].split("/")[0])
 
 # Calculate the maximium value per frame
 width = int(metadata["@width"])
@@ -24,9 +27,9 @@ for frame in tqdm(video, total=n_frames):
     results.append(frame.sum() / max_per_frame)
 
 results = np.array(results)
-plt.plot(results)
+plt.plot(np.arange(n_frames) / frame_rate, results)
 plt.title("Fractional pixel intensity over time")
-plt.xlabel("Frame")
+plt.xlabel("Time in seconds")
 plt.ylabel("Intensity")
 plt.savefig(filename + ".png")
 np.savetxt(filename + ".txt", results)
