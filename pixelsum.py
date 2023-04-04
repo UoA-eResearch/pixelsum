@@ -7,6 +7,7 @@ import sys
 from tqdm import tqdm # Progress bar
 from pprint import pprint
 import os
+import pandas as pd
 
 filename = sys.argv[1]
 
@@ -26,8 +27,8 @@ max_per_frame = width * height * max_pixel_value
 
 # If we've already processed this video, read the results from txt
 # This is useful for testing out modifications to the plotting code below
-if os.path.isfile(filename + ".txt"):
-    results = np.loadtxt(filename + ".txt")
+if os.path.isfile(filename + ".csv"):
+    df = pd.read_csv(filename + ".csv")
 else:
     video = skvideo.io.vreader(filename)
     results = []
@@ -36,10 +37,12 @@ else:
 
     results = np.array(results)
     results = results / max_per_frame
+    frame_number = np.arange(n_frames)
+    df = pd.DataFrame({"frame": frame_number, "time_seconds": frame_number / frame_rate, "intensity": results})
+    df.to_csv(filename + ".csv", index=False)
 
-plt.plot(np.arange(n_frames) / frame_rate, results)
+plt.plot(df.time_seconds, df.intensity)
 plt.title("Fractional pixel intensity over time")
 plt.xlabel("Time in seconds")
 plt.ylabel("Intensity")
 plt.savefig(filename + ".png")
-np.savetxt(filename + ".txt", results)

@@ -1,3 +1,4 @@
 scikit-video
 matplotlib
 tqdm
+pandas
