@@ -41,7 +41,7 @@ else:
     df = pd.DataFrame({"frame": frame_number, "time_seconds": frame_number / frame_rate, "intensity": results})
     df.to_csv(filename + ".csv", index=False)
 
-plt.plot(df.time_seconds, df.intensity)
+plt.plot(df.time_seconds, df.intensity, color="green")
 plt.title("Fractional pixel intensity over time")
 plt.xlabel("Time in seconds")
 plt.ylabel("Intensity")
